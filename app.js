@@ -12,7 +12,7 @@ function coverImage(project) { return projectImages(project)[0]; }
 function cardLinks(project) {
   return (project.links || []).filter(link => link.url !== project.externalDemo?.url || Boolean(project.externalDemo?.embed)).map(link => {
     const href = safeURL(link.url); if (!href) return '';
-    return `<a class="card-source ${link.private ? 'is-private' : ''}" href="${escapeHTML(href)}" target="_blank" rel="noopener noreferrer">${escapeHTML(link.private ? 'Private repository' : link.label)} <span aria-hidden="true">↗</span>${link.private ? '<span class="access-label">Access required</span>' : ''}</a>`;
+    return `<a class="card-source ${link.private ? 'is-private' : ''}" href="${escapeHTML(href)}" target="_blank" rel="noopener noreferrer">${escapeHTML(link.label || (link.private ? 'Private repository' : 'Source on GitHub'))} <span aria-hidden="true">↗</span>${link.private ? '<span class="access-label">Access required</span>' : ''}</a>`;
   }).join('');
 }
 function demoAction(project) {
@@ -24,10 +24,10 @@ function renderProjects() {
   grid.innerHTML = profile.projects.filter(project => !project.technical).map((project, index) => {
     const image = coverImage(project);
     const isVideo = Boolean(project.video || project.externalDemo);
-    const previewBody = `<img src="${escapeHTML(project.video?.poster || image.src)}" alt="${escapeHTML(image.alt)}" style="object-fit:${project.id === 'taskhero' || project.id === 'solar-system' ? 'contain' : 'cover'}" ${index ? 'loading="lazy"' : ''}><span class="preview-type">${escapeHTML(project.coverLabel || 'PROJECT CAPTURE')}</span><span class="preview-label">${isVideo ? '<span class="preview-play" aria-hidden="true">▶</span>' : '<span class="preview-play preview-explore" aria-hidden="true">↗</span>'}<span><strong>${escapeHTML(project.previewLabel)}</strong><small>${escapeHTML(project.previewMeta)}</small></span></span>`;
+    const previewBody = `<img src="${escapeHTML(project.video?.poster || image.src)}" alt="${escapeHTML(image.alt)}" style="object-fit:${['taskhero', 'solar-system', 'bingo'].includes(project.id) ? 'contain' : 'cover'}" ${index ? 'loading="lazy"' : ''}><span class="preview-type">${escapeHTML(project.coverLabel || 'PROJECT CAPTURE')}</span><span class="preview-label">${isVideo ? '<span class="preview-play" aria-hidden="true">▶</span>' : '<span class="preview-play preview-explore" aria-hidden="true">↗</span>'}<span><strong>${escapeHTML(project.previewLabel)}</strong><small>${escapeHTML(project.previewMeta)}</small></span></span>`;
     const externalPreview = project.externalDemo && !project.externalDemo.embed ? project.externalDemo.url : null;
     const preview = externalPreview ? `<a class="project-preview" href="${escapeHTML(externalPreview)}" target="_blank" rel="noopener noreferrer" aria-label="Watch ${escapeHTML(project.title)} app demonstration on Google Drive">${previewBody}</a>` : `<button class="project-preview" data-project="${escapeHTML(project.id)}" data-start="${isVideo ? 'demo' : 'images'}" aria-haspopup="dialog" aria-label="${escapeHTML(project.previewLabel)} — ${escapeHTML(project.title)}">${previewBody}</button>`;
-    return `<article id="project-${escapeHTML(project.id)}" class="project-card ${index === 0 ? 'project-feature' : ''}" style="--index:${index}">${preview}<div class="project-card-content"><div class="project-overline"><span>${String(index + 1).padStart(2, '0')} /</span><span>${escapeHTML(project.stack)}</span></div><h3>${escapeHTML(project.title)}</h3><p class="project-summary">${escapeHTML(project.summary)}</p><div class="project-card-actions">${demoAction(project)}${cardLinks(project)}<button type="button" class="card-case-study" data-project="${escapeHTML(project.id)}" data-start="default" aria-haspopup="dialog">Case study <span aria-hidden="true">↗</span></button></div>${project.id === 'dx12-lighting' ? '<p class="card-scope-note">GitHub link: early Win32 scaffold. The recording shows the later renderer and tools.</p>' : ''}</div></article>`;
+    return `<article id="project-${escapeHTML(project.id)}" class="project-card ${index === 0 ? 'project-feature' : ''}" style="--index:${index}">${preview}<div class="project-card-content"><div class="project-overline"><span>${String(index + 1).padStart(2, '0')} /</span><span>${escapeHTML(project.stack)}</span></div><h3>${escapeHTML(project.title)}</h3><p class="project-summary">${escapeHTML(project.summary)}</p><div class="project-card-actions">${demoAction(project)}${cardLinks(project)}<button type="button" class="card-case-study" data-project="${escapeHTML(project.id)}" data-start="default" aria-haspopup="dialog">Case study <span aria-hidden="true">↗</span></button></div>${project.scopeNote ? `<p class="card-scope-note">${escapeHTML(project.scopeNote)}</p>` : project.id === 'dx12-lighting' ? '<p class="card-scope-note">GitHub link: early Win32 scaffold. The recording shows the later renderer and tools.</p>' : ''}</div></article>`;
   }).join('');
   technicalGrid.innerHTML = profile.projects.filter(project => project.technical).map(project => `<article id="project-${escapeHTML(project.id)}" class="project-technical"><div class="technical-card-top"><span class="technical-language">${escapeHTML(project.category)}</span><span class="technical-kind">${escapeHTML(project.kind)}</span></div><h4>${escapeHTML(project.title)}</h4><p class="technical-subtitle">${escapeHTML(project.subtitle)}</p><p class="technical-description">${escapeHTML(project.summary)}</p><p class="technical-stack">${escapeHTML(project.stack)}</p><div class="technical-card-actions">${cardLinks(project)}<button type="button" class="card-case-study" data-project="${escapeHTML(project.id)}" data-start="default" aria-haspopup="dialog">Case study <span aria-hidden="true">↗</span></button></div></article>`).join('');
 }
@@ -121,7 +121,7 @@ function openProject(project, origin, start = 'default') {
   for (const link of projectLinks) {
     const href = /^mailto:[^\s@]+@[^\s@]+\.[^\s@?]+(?:\?[^\s]*)?$/.test(link.url) ? link.url : safeURL(link.url); if (!href) continue;
     const a = document.createElement('a'); a.href = href; if (!href.startsWith('mailto:')) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
-    a.textContent = `${link.private ? 'Private repository' : link.label} ↗`;
+    a.textContent = `${link.label || (link.private ? 'Private repository' : 'Source on GitHub')} ↗`;
     if (link.private) a.className = 'private-repository';
     links.append(a);
   }
@@ -150,6 +150,7 @@ dialog.addEventListener('close', () => { pauseMedia(); document.body.style.overf
 renderProjects();
 const total = String(profile.projects.length).padStart(2, '0');
 document.querySelector('.header nav a span').textContent = total;
+document.querySelector('.selected-count').textContent = `${total} PROJECTS`;
 document.querySelector('#year').textContent = new Date().getFullYear();
 const contacts = [];
 if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.email)) contacts.push(['mailto:' + profile.email, 'Email me ↗']);

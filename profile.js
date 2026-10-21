@@ -78,6 +78,50 @@ window.PORTFOLIO = {
       "mediaKind": "video"
     },
     {
+      "id": "bingo",
+      "category": "C#",
+      "title": "Bingo · UDP Multiplayer",
+      "kind": "Multiplayer networking · Coursework",
+      "featured": true,
+      "visual": "bingo",
+      "status": "Coursework prototype · October 2026",
+      "stack": "C# · .NET · Windows Forms · UDP",
+      "summary": "A client / server Bingo prototype with fixed 3×3 cards, shared 100 ms draws, and client-reported wins.",
+      "description": "A Windows Forms multiplayer Bingo prototype built on the course UDP client / server framework. The server distributes a separate 3×3 card to each client and draws numbers from 10 to 99. Clients replace matching values with zero; a player wins only when all nine cells are zero, rather than by completing a line.",
+      "contributions": [
+        "Extended the existing C# UDP framework into a game with one server and multiple Windows Forms clients.",
+        "Generated a separate 3×3 card for each client and scheduled the same number to be sent to every connected client at 100 ms intervals.",
+        "Updated the client board as numbers arrived and detected a win only when every cell had become zero.",
+        "Sent the completed client’s Bingo! message again every 500 ms until the server acknowledged the result with WinnerFound.",
+        "Added sequential Client 1 / Client 2 identifiers and a server log identifying the winning client before stopping the round."
+      ],
+      "design": "The server owns board creation and number draws; clients handle their board display and completion detection. A WinnerFound message ends the round. Retrying the critical Bingo! message until acknowledgement adds an application-level confirmation step over UDP.",
+      "note": "The runtime capture shows the completed client board. The linked private repository currently contains the earlier UDP movement exercise; this Bingo revision has not yet been pushed there.",
+      "source": "",
+      "demo": "",
+      "links": [
+        {
+          "url": "https://github.com/Lethache/BingoGame",
+          "label": "Earlier UDP code",
+          "private": true
+        }
+      ],
+      "images": [
+        {
+          "src": "assets/projects/bingo-client.png",
+          "alt": "Running Bingo client with a completed 3×3 board, Bingo! status, and received-number log",
+          "caption": "Actual client capture — all nine cells are zero and the client displays Bingo!",
+          "fit": "contain"
+        }
+      ],
+      "coverLabel": "RUNNING CLIENT",
+      "previewLabel": "View Bingo client",
+      "previewMeta": "3×3 · COMPLETED BOARD",
+      "mediaAction": "View runtime capture",
+      "mediaKind": "images",
+      "scopeNote": "GitHub link: earlier UDP coursework base. The capture shows the Bingo build."
+    },
+    {
       "id": "dx12-lighting",
       "category": "C++",
       "title": "DX12 Lighting & Tools",
