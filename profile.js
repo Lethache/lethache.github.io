@@ -1,4 +1,4 @@
-// Selected gameplay, graphics, tools, application, and networking projects.
+// Selected gameplay, graphics, editor tools, application, and networking projects.
 window.PORTFOLIO = {
   "email": "mishalol8474@gmail.com",
   "github": "https://github.com/Lethache",
@@ -78,50 +78,6 @@ window.PORTFOLIO = {
       "mediaKind": "video"
     },
     {
-      "id": "bingo",
-      "category": "C#",
-      "title": "Bingo · UDP Multiplayer",
-      "kind": "Multiplayer networking · Coursework",
-      "featured": true,
-      "visual": "bingo",
-      "status": "Coursework prototype · October 2026",
-      "stack": "C# · .NET · Windows Forms · UDP",
-      "summary": "A client / server Bingo prototype with fixed 3×3 cards, shared 100 ms draws, and client-reported wins.",
-      "description": "A Windows Forms multiplayer Bingo prototype built on the course UDP client / server framework. The server distributes a separate 3×3 card to each client and draws numbers from 10 to 99. Clients replace matching values with zero; a player wins only when all nine cells are zero, rather than by completing a line.",
-      "contributions": [
-        "Extended the existing C# UDP framework into a game with one server and multiple Windows Forms clients.",
-        "Generated a separate 3×3 card for each client and scheduled the same number to be sent to every connected client at 100 ms intervals.",
-        "Updated the client board as numbers arrived and detected a win only when every cell had become zero.",
-        "Sent the completed client’s Bingo! message again every 500 ms until the server acknowledged the result with WinnerFound.",
-        "Added sequential Client 1 / Client 2 identifiers and a server log identifying the winning client before stopping the round."
-      ],
-      "design": "The server owns board creation and number draws; clients handle their board display and completion detection. A WinnerFound message ends the round. Retrying the critical Bingo! message until acknowledgement adds an application-level confirmation step over UDP.",
-      "note": "The runtime capture shows the completed client board. The linked private repository currently contains the earlier UDP movement exercise; this Bingo revision has not yet been pushed there.",
-      "source": "",
-      "demo": "",
-      "links": [
-        {
-          "url": "https://github.com/Lethache/BingoGame",
-          "label": "Earlier UDP code",
-          "private": true
-        }
-      ],
-      "images": [
-        {
-          "src": "assets/projects/bingo-client.png",
-          "alt": "Running Bingo client with a completed 3×3 board, Bingo! status, and received-number log",
-          "caption": "Actual client capture — all nine cells are zero and the client displays Bingo!",
-          "fit": "contain"
-        }
-      ],
-      "coverLabel": "RUNNING CLIENT",
-      "previewLabel": "View Bingo client",
-      "previewMeta": "3×3 · COMPLETED BOARD",
-      "mediaAction": "View runtime capture",
-      "mediaKind": "images",
-      "scopeNote": "GitHub link: earlier UDP coursework base. The capture shows the Bingo build."
-    },
-    {
       "id": "dx12-lighting",
       "category": "C++",
       "title": "DX12 Lighting & Tools",
@@ -183,6 +139,42 @@ window.PORTFOLIO = {
       }
     },
     {
+      "id": "teapot-editor",
+      "category": "C#",
+      "title": "3D Editor · PropertyGrid Tools",
+      "kind": "Artist-facing editor workflow · Coursework",
+      "featured": true,
+      "visual": "teapot",
+      "status": "Course project · October 2026 · Source available on request",
+      "stack": "C# · MonoGame · Windows Forms · PropertyGrid",
+      "summary": "A 3D scene editor for selecting a teapot, editing transforms, switching textures, and saving the result.",
+      "description": "Extended a MonoGame and Windows Forms editor with a PropertyGrid workflow around a selectable 3D teapot. Position, rotation, scale, selection state, and diffuse texture are exposed as editable properties, while internal rendering objects stay out of the artist-facing controls. The scene can be saved and reopened with the chosen transform and texture.",
+      "contributions": [
+        "Grouped model properties into Appearance, State, and Transformation; hid mesh, texture, and shader internals from the PropertyGrid.",
+        "Added mouse selection and a dirty flag so the grid changes its selected object only when selection changes.",
+        "Used INotifyPropertyChanged to reflect model movement and rotation in the grid; editable Vector3 X/Y/Z fields remain usable because refresh waits while a cell has focus.",
+        "Provided a DiffuseTexture dropdown for Grass, HeightMap, and Metal, loading the selected asset through ContentManager and persisting it with the model transforms."
+      ],
+      "design": "The editor keeps runtime model state and form controls in sync without rebuilding the PropertyGrid every frame. Selection triggers a targeted update, model changes notify the UI, and a focused cell is left alone while someone edits a value.",
+      "note": "The illustration explains the workflow; it is not a screenshot of the running application. The current public portfolio does not contain the Assignment 2 source or a runtime recording.",
+      "source": "",
+      "demo": "",
+      "links": [],
+      "images": [
+        {
+          "src": "assets/projects/teapot-editor-workflow.svg",
+          "alt": "Diagram of a teapot model beside editable Position, Rotation, Scale and DiffuseTexture properties",
+          "caption": "Workflow illustration, not an application capture — select, edit, change texture, save",
+          "fit": "contain"
+        }
+      ],
+      "coverLabel": "WORKFLOW ILLUSTRATION",
+      "previewLabel": "Explore editor workflow",
+      "previewMeta": "SELECT · EDIT · SAVE",
+      "mediaAction": "View workflow diagram",
+      "mediaKind": "images"
+    },
+    {
       "id": "solar-system",
       "category": "C#",
       "title": "Solar System Editor",
@@ -199,7 +191,7 @@ window.PORTFOLIO = {
         "Project.cs serializes and restores scene data through binary .oce project files.",
         "Added New, Open, and Save commands with Ctrl+N, Ctrl+O, and Ctrl+S keyboard shortcuts."
       ],
-      "note": "Private academic repository. Its older README mentions an earlier teapot scene; the current Level.cs contains the solar-system implementation.",
+      "note": "Private academic repository. Its current Level.cs contains the solar-system implementation; the PropertyGrid teapot extension above is a separate later assignment.",
       "source": "",
       "demo": "",
       "design": "The editor separates scene simulation from project persistence. A saved project records the scene configuration so it can be reopened and edited rather than reconstructed by hand.",
@@ -229,6 +221,50 @@ window.PORTFOLIO = {
       "previewMeta": "PROJECT PRESENTATION · 2 IMAGES",
       "mediaAction": "View presentation",
       "mediaKind": "images"
+    },
+    {
+      "id": "bingo",
+      "category": "C#",
+      "title": "Bingo · UDP Multiplayer",
+      "kind": "Multiplayer networking · Coursework",
+      "featured": true,
+      "visual": "bingo",
+      "status": "Coursework prototype · October 2026",
+      "stack": "C# · .NET · Windows Forms · UDP",
+      "summary": "A client / server Bingo prototype with fixed 3×3 cards, shared 100 ms draws, and client-reported wins.",
+      "description": "A Windows Forms multiplayer Bingo prototype built on the course UDP client / server framework. The server distributes a separate 3×3 card to each client and draws numbers from 10 to 99. Clients replace matching values with zero; a player wins only when all nine cells are zero, rather than by completing a line.",
+      "contributions": [
+        "Extended the existing C# UDP framework into a game with one server and multiple Windows Forms clients.",
+        "Generated a separate 3×3 card for each client and scheduled the same number to be sent to every connected client at 100 ms intervals.",
+        "Updated the client board as numbers arrived and detected a win only when every cell had become zero.",
+        "Sent the completed client’s Bingo! message again every 500 ms until the server acknowledged the result with WinnerFound.",
+        "Added sequential Client 1 / Client 2 identifiers and a server log identifying the winning client before stopping the round."
+      ],
+      "design": "The server owns board creation and number draws; clients handle their board display and completion detection. A WinnerFound message ends the round. Retrying the critical Bingo! message until acknowledgement adds an application-level confirmation step over UDP.",
+      "note": "The runtime capture shows the completed client board. The linked private repository currently contains the earlier UDP movement exercise; this Bingo revision has not yet been pushed there.",
+      "source": "",
+      "demo": "",
+      "links": [
+        {
+          "url": "https://github.com/Lethache/BingoGame",
+          "label": "Earlier UDP code",
+          "private": true
+        }
+      ],
+      "images": [
+        {
+          "src": "assets/projects/bingo-client.png",
+          "alt": "Running Bingo client with a completed 3×3 board, Bingo! status, and received-number log",
+          "caption": "Actual client capture — all nine cells are zero and the client displays Bingo!",
+          "fit": "contain"
+        }
+      ],
+      "coverLabel": "RUNNING CLIENT",
+      "previewLabel": "View Bingo client",
+      "previewMeta": "3×3 · COMPLETED BOARD",
+      "mediaAction": "View runtime capture",
+      "mediaKind": "images",
+      "scopeNote": "GitHub link: earlier UDP coursework base. The capture shows the Bingo build."
     },
     {
       "id": "taskhero",
